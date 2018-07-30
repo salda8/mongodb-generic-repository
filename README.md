@@ -1,10 +1,10 @@
 # MongoDbGenericRepository
-An example of generic repository implementation using the MongoDB C# Sharp 2.0 driver (async)
+An example of generic repository implementation using the MongoDB C# Sharp driver (async)
 
 Now available as a nuget package:
-https://www.nuget.org/packages/MongoDbGenericRepository/
 
-Covered by 200+ integration tests and counting.
+
+Covered by 100+ integration tests and counting.
 
 The MongoDbGenericRepository is also used in [AspNetCore.Identity.MongoDbCore](https://github.com/alexandre-spieser/AspNetCore.Identity.MongoDbCore).
 

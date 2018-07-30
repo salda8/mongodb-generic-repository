@@ -1,0 +1,19 @@
+source https://www.myget.org/F/salda/api/v3/index.json
+source https://api.nuget.org/v3/index.json
+
+nuget DnsClient
+clitool dotnet-xunit prerelease
+nuget Microsoft.AspNetCore.Identity
+nuget Microsoft.Extensions.Identity.Stores
+nuget Microsoft.NET.Test.Sdk
+nuget MongoDB.Bson
+nuget MongoDB.Driver
+nuget MongoDB.Driver.Core
+nuget MongoDbGenericRepository
+nuget NUnit
+nuget NUnit.ConsoleRunner
+nuget System.Buffers
+nuget System.Runtime.InteropServices.RuntimeInformation
+nuget xunit
+nuget xunit.runner.console
+nuget xunit.runner.visualstudio

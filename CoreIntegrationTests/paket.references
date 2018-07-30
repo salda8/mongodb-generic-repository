@@ -1,0 +1,9 @@
+Microsoft.AspNetCore.Identity
+Microsoft.Extensions.Identity.Stores
+Microsoft.NET.Test.Sdk
+MongoDB.Driver
+MongoDbGenericRepository
+xunit
+xunit.runner.console
+xunit.runner.visualstudio
+dotnet-xunit

@@ -3,7 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{A484A355-A015-40CC-9B35-A4E872421128}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{85B3AAAF-579C-4EED-9484-300AE26B1078}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDbGenericRepository", "MongoDbGenericRepository\MongoDbGenericRepository.csproj", "{EFC776C4-2AF3-440C-BE80-3FBE335817A5}"
 EndProject
@@ -15,10 +18,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A484A355-A015-40CC-9B35-A4E872421128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A484A355-A015-40CC-9B35-A4E872421128}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A484A355-A015-40CC-9B35-A4E872421128}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A484A355-A015-40CC-9B35-A4E872421128}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFC776C4-2AF3-440C-BE80-3FBE335817A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFC776C4-2AF3-440C-BE80-3FBE335817A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFC776C4-2AF3-440C-BE80-3FBE335817A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
