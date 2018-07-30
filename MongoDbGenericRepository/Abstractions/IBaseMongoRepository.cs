@@ -98,6 +98,8 @@ namespace MongoDbGenericRepository
         #endregion
 
         #region Update
+        Task<bool> UpdateFieldsAsync<TDocument>(string id, Dictionary<string, object> updates) where TDocument : IDocument;
+        Task<TDocument> UpdateFields<TDocument>(string id, Dictionary<string, object> updates, FindOneAndUpdateOptions<TDocument> findOneAndUpdateOptions) where TDocument : IDocument;
 
         /// <summary>
         /// Asynchronously Updates a document.
@@ -329,7 +331,11 @@ namespace MongoDbGenericRepository
             where TDocument : IDocument<TKey>
             where TKey : IEquatable<TKey>;
 
+        Task<TDocument> ReplaceOneAndGetAsync<TDocument>(string id, TDocument modifiedDocument, FindOneAndReplaceOptions<TDocument> findOneAndReplaceOptions) where TDocument : IDocument;
+        Task<bool> ReplaceDocumentAsync<TDocument>(TDocument modifiedDocument) where TDocument : IDocument;
         #endregion
+
+
 
         #region Delete
 

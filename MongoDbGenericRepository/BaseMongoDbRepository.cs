@@ -27,7 +27,7 @@ namespace MongoDbGenericRepository
         }
 
         /// <summary>
-        /// The contructor taking a <see cref="IMongoDbContext"/>.
+        /// The constructor taking a <see cref="IMongoDbContext"/>.
         /// </summary>
         /// <param name="mongoDbContext">A mongodb context implementing <see cref="IMongoDbContext"/></param>
         protected BaseMongoRepository(IMongoDbContext mongoDbContext) : base(mongoDbContext)
@@ -36,7 +36,7 @@ namespace MongoDbGenericRepository
         }
 
         /// <summary>
-        /// The contructor taking a <see cref="IMongoDatabase"/>.
+        /// The constructor taking a <see cref="IMongoDatabase"/>.
         /// </summary>
         /// <param name="mongoDatabase">A mongodb context implementing <see cref="IMongoDatabase"/></param>
         protected BaseMongoRepository(IMongoDatabase mongoDatabase) : base(mongoDatabase)
@@ -593,8 +593,8 @@ namespace MongoDbGenericRepository
             {
                 return 0;
             }
-            var idsTodelete = documents.Select(e => e.Id).ToArray();
-            return (await HandlePartitioned(documents.FirstOrDefault()).DeleteManyAsync(x => idsTodelete.Contains(x.Id))).DeletedCount;
+            var idsToDelete = documents.Select(e => e.Id).ToArray();
+            return (await HandlePartitioned(documents.FirstOrDefault()).DeleteManyAsync(x => idsToDelete.Contains(x.Id))).DeletedCount;
         }
 
         /// <summary>
@@ -609,8 +609,8 @@ namespace MongoDbGenericRepository
             {
                 return 0;
             }
-            var idsTodelete = documents.Select(e => e.Id).ToArray();
-            return HandlePartitioned(documents.FirstOrDefault()).DeleteMany(x => idsTodelete.Contains(x.Id)).DeletedCount;
+            var idsToDelete = documents.Select(e => e.Id).ToArray();
+            return HandlePartitioned(documents.FirstOrDefault()).DeleteMany(x => idsToDelete.Contains(x.Id)).DeletedCount;
         }
 
         /// <summary>
@@ -719,8 +719,8 @@ namespace MongoDbGenericRepository
             {
                 return 0;
             }
-            var idsTodelete = documents.Select(e => e.Id).ToArray();
-            return (await HandlePartitioned<TDocument, TKey>(documents.FirstOrDefault()).DeleteManyAsync(x => idsTodelete.Contains(x.Id))).DeletedCount;
+            var idsToDelete = documents.Select(e => e.Id).ToArray();
+            return (await HandlePartitioned<TDocument, TKey>(documents.FirstOrDefault()).DeleteManyAsync(x => idsToDelete.Contains(x.Id))).DeletedCount;
         }
 
         /// <summary>
@@ -738,8 +738,8 @@ namespace MongoDbGenericRepository
             {
                 return 0;
             }
-            var idsTodelete = documents.Select(e => e.Id).ToArray();
-            return HandlePartitioned<TDocument, TKey>(documents.FirstOrDefault()).DeleteMany(x => idsTodelete.Contains(x.Id)).DeletedCount;
+            var idsToDelete = documents.Select(e => e.Id).ToArray();
+            return HandlePartitioned<TDocument, TKey>(documents.FirstOrDefault()).DeleteMany(x => idsToDelete.Contains(x.Id)).DeletedCount;
         }
 
         /// <summary>
@@ -1060,6 +1060,67 @@ namespace MongoDbGenericRepository
             }
 
             document.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+        }
+
+        public async Task<bool> UpdateFieldsAsync<TDocument>(string id, Dictionary<string, object> updates) where TDocument : IDocument
+        {
+            UpdateDefinition<TDocument> updateDefinition = BuildUpdateDefinition(ConvertToFieldDefinitions<TDocument>(updates));
+            var document = await GetByIdAsync<TDocument, string>(id);
+            return await UpdateOneAsync(document, updateDefinition);
+        }
+        public Task<TDocument> UpdateFields<TDocument>(string id, Dictionary<string, object> updates, FindOneAndUpdateOptions<TDocument> findOneAndUpdateOptions = null) where TDocument : IDocument
+        {
+            List<Tuple<FieldDefinition<TDocument, object>, object>> list = ConvertToFieldDefinitions<TDocument>(updates);
+            return UpdateFieldsAndGetAsync(id, list, findOneAndUpdateOptions);
+        }
+
+        private static UpdateDefinition<TDocument> BuildUpdateDefinition<TDocument>(List<Tuple<FieldDefinition<TDocument, object>, object>> fieldDefinitions)
+        where TDocument : IDocument
+        {
+            int fieldDefCount = fieldDefinitions.Count;
+            var updateDefinitions = new UpdateDefinition<TDocument>[fieldDefCount];
+            var updateBuilder = Builders<TDocument>.Update;
+
+            for (int i = 0; i < fieldDefCount; i++)
+            {
+                var fieldDef = fieldDefinitions[i];
+                updateDefinitions[i] = updateBuilder.Set(fieldDef.Item1, fieldDef.Item2);
+            }
+
+            return updateBuilder.Combine(updateDefinitions);
+        }
+
+        private Task<TDocument> UpdateFieldsAndGetAsync<TDocument>(string id, List<Tuple<FieldDefinition<TDocument, object>, object>> fieldDefinitions, FindOneAndUpdateOptions<TDocument> findOneAndUpdateOptions, string partioningKey = null)
+        where TDocument : IDocument
+        {
+            UpdateDefinition<TDocument> updateDefinition = BuildUpdateDefinition(fieldDefinitions);
+            var filter = Builders<TDocument>.Filter.Eq("Id", String.IsNullOrWhiteSpace(id) ? throw new ArgumentNullException(nameof(id)) : id);
+            return base.HandlePartitioned<TDocument>(partioningKey).FindOneAndUpdateAsync<TDocument>(filter, updateDefinition,
+                    findOneAndUpdateOptions ?? new FindOneAndUpdateOptions<TDocument>() { ReturnDocument = ReturnDocument.After });
+        }
+
+        private static List<Tuple<FieldDefinition<TDocument, object>, object>> ConvertToFieldDefinitions<TDocument>(Dictionary<string, object> updates) where TDocument : IDocument
+        {
+            var list = new List<Tuple<FieldDefinition<TDocument, object>, object>>();
+            foreach (var item in updates.Keys)
+            {
+                FieldDefinition<TDocument, object> fieldDef = item;
+                list.Add(Tuple.Create(fieldDef, updates[item]));
+            }
+
+            return list;
+        }
+
+        public async Task<TDocument> ReplaceOneAndGetAsync<TDocument>(string id, TDocument modifiedDocument, FindOneAndReplaceOptions<TDocument> findOneAndReplaceOptions = null)
+        where TDocument : IDocument
+        
+        {
+            var filter = Builders<TDocument>.Filter.Eq("Id", String.IsNullOrWhiteSpace(id) ? modifiedDocument.Id : throw new ArgumentNullException(nameof(id)));
+            return await HandlePartitioned(modifiedDocument).FindOneAndReplaceAsync(filter, modifiedDocument, findOneAndReplaceOptions ?? new FindOneAndReplaceOptions<TDocument, TDocument> { ReturnDocument = ReturnDocument.After });
+        }
+        public async Task<bool> ReplaceDocumentAsync<TDocument>(TDocument modifiedDocument) where TDocument : IDocument
+        {
+            return await UpdateOneAsync(modifiedDocument);
         }
     }
 }
