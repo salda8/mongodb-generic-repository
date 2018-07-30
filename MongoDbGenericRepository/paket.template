@@ -1,0 +1,6 @@
+type project
+licenseUrl https://github.com/salda8/mongodb-generic-repository/blob/master/LICENSE
+projectUrl https://github.com/salda8/mongodb-generic-repository/
+authors Salda8
+description An example of generic repository implementation using the MongoDB C# Sharp driver (async)
+tags NoSql MongoDb DocumentDb Repository

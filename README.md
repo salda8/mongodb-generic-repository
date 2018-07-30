@@ -1,4 +1,8 @@
 # MongoDbGenericRepository
+[![Build status](https://ci.appveyor.com/api/projects/status/2qbsnt05tivh9l2t/branch/master?svg=true)](https://ci.appveyor.com/project/salda8/mongodb-generic-repository/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/2qbsnt05tivh9l2t/branch/master?svg=true)](https://ci.appveyor.com/project/salda8/mongodb-generic-repository/branch/develop)
+[![Build status](https://ci.appveyor.com/api/projects/status/2qbsnt05tivh9l2t?svg=true)](https://ci.appveyor.com/project/salda8/mongodb-generic-repository)
+
 An example of generic repository implementation using the MongoDB C# Sharp driver (async)
 
 Now available as a nuget package:
