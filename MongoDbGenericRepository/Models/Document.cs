@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 
 namespace MongoDbGenericRepository.Models
@@ -14,15 +15,15 @@ namespace MongoDbGenericRepository.Models
         /// </summary>
         public Document()
         {
-            Id = Guid.NewGuid();
+            Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             AddedAtUtc = DateTime.UtcNow;
         }
 
         /// <summary>
         /// The Id of the document
         /// </summary>
-        [BsonId]
-        public Guid Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         /// <summary>
         /// The datetime in UTC at which the document was added.

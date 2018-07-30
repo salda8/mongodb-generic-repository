@@ -21,17 +21,32 @@ namespace MongoDbGenericRepository.Utils
             switch (idTypeName)
             {
                 case "Guid":
-                    return (TKey)(object)Guid.NewGuid();
+                    {
+                        return (TKey)(object)Guid.NewGuid();
+                    }
                 case "Int16":
-                    return (TKey)(object)Random.Next(1, short.MaxValue);
+                    {
+                        return (TKey)(object)Random.Next(1, short.MaxValue);
+                    }
                 case "Int32":
-                    return (TKey)(object)Random.Next(1, int.MaxValue);
+                    {
+                        return (TKey)(object)Random.Next(1, int.MaxValue);
+                    }
                 case "Int64":
-                    return (TKey)(object)(Random.NextLong(1, long.MaxValue));
+                    {
+                        return (TKey)(object)(Random.NextLong(1, long.MaxValue));
+                    }
                 case "String":
-                    return (TKey)(object)Guid.NewGuid().ToString();
+                    {
+                        return (TKey)(object)Guid.NewGuid().ToString();
+                    }
                 case "ObjectId":
-                    return (TKey)(object)ObjectId.GenerateNewId();
+                    {
+                        return (TKey)(object)ObjectId.GenerateNewId();
+                    }
+
+                default:
+                    break;
             }
             throw new ArgumentException($"{idTypeName} is not a supported Id type, the Id of the document cannot be set.");
         }

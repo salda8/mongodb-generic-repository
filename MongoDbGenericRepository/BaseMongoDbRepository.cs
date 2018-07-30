@@ -1058,10 +1058,8 @@ namespace MongoDbGenericRepository
             {
                 throw new ArgumentNullException(nameof(document));
             }
-            if (document.Id == default(Guid))
-            {
-                document.Id = Guid.NewGuid();
-            }
+
+            document.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
         }
     }
 }
