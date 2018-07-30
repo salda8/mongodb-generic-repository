@@ -1,4 +1,5 @@
 # MongoDbGenericRepository
+
 [![Build status](https://ci.appveyor.com/api/projects/status/2qbsnt05tivh9l2t/branch/master?svg=true)](https://ci.appveyor.com/project/salda8/mongodb-generic-repository/branch/master)
 [![Build status](https://ci.appveyor.com/api/projects/status/2qbsnt05tivh9l2t/branch/master?svg=true)](https://ci.appveyor.com/project/salda8/mongodb-generic-repository/branch/develop)
 [![Build status](https://ci.appveyor.com/api/projects/status/2qbsnt05tivh9l2t?svg=true)](https://ci.appveyor.com/project/salda8/mongodb-generic-repository)
@@ -7,14 +8,13 @@ An example of generic repository implementation using the MongoDB C# Sharp drive
 
 Now available as a nuget package:
 
-
 Covered by 100+ integration tests and counting.
 
 The MongoDbGenericRepository is also used in [AspNetCore.Identity.MongoDbCore](https://github.com/alexandre-spieser/AspNetCore.Identity.MongoDbCore).
 
-# Usage examples
+## Usage examples
 
-This repository is meant to be inherited from. 
+This repository is meant to be inherited from.
 
 You are responsible for managing its lifetime, it is advised to setup this repository as a singleton.
 
@@ -26,7 +26,7 @@ Here is an example of repository usage, where the TestRepository is implementing
         void DropTestCollection<TDocument>();
         void DropTestCollection<TDocument>(string partitionKey);
     }
-    
+
     public class TestRepository : BaseMongoRepository, ITestRepository
     {
         public TestRepository(string connectionString, string databaseName) : base(connectionString, databaseName)
@@ -45,7 +45,7 @@ Here is an example of repository usage, where the TestRepository is implementing
     }
 ```
 
-## Instantiation
+### Instantiation
 
 The repository can be instantiated like so:
 
@@ -61,7 +61,8 @@ var mongoDbDatabase = Client.GetDatabase(databaseName);
 ITestRepository testRepository = new TestRepository(mongoDbDatabase);
 ```
 
-## Adding documents
+### Adding documents
+
 To add a document, its class must inherit from the `Document` class,  implement the `IDocument` or `IDocument<TKey>` interface:
 
 ```csharp
@@ -87,7 +88,7 @@ The `IDocument` and `IDocument<TKey>` interfaces can be seen below:
         Guid Id { get; set; }
         int Version { get; set; }
     }
-    
+
     /// <summary>
     /// This class represents a basic document that can be stored in MongoDb.
     /// Your document must implement this class in order for the MongoDbRepository to handle them.
@@ -95,7 +96,7 @@ The `IDocument` and `IDocument<TKey>` interfaces can be seen below:
     public interface IDocument<TKey> where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// The Primary Key, which must be decorated with the [BsonId] attribute 
+        /// The Primary Key, which must be decorated with the [BsonId] attribute
         /// if you want the MongoDb C# driver to consider it to be the document ID.
         /// </summary>
         [BsonId]
@@ -107,10 +108,12 @@ The `IDocument` and `IDocument<TKey>` interfaces can be seen below:
     }
 ```
 
-## Partitioned collections
+### Partitioned collections
+
 This repository also allows you to partition your document across multiple collections, this can be useful if you are running a SaaS application and want to keep good performance.
 
 To use partitioned collections, you must define your documents using the PartitionedDocument class, which implements the IPartitionedDocument interface:
+
 ```csharp
     public class MyPartitionedDocument : PartitionedDocument
     {
@@ -123,7 +126,7 @@ To use partitioned collections, you must define your documents using the Partiti
 ```
 
 This partitioned key will be used as a prefix to your collection name.
-The collection name is derived from the name of the type of your document, is set to camel case, and is pluralized using a class taken from Humanizer (https://github.com/Humanizr/Humanizer).
+The collection name is derived from the name of the type of your document, is set to camel case, and is pluralized using a class taken from Humanizer (<https://github.com/Humanizr/Humanizer).>
 
 ```csharp
 var myDoc = new MyPartitionedDocument("myPartitionKey");
@@ -133,9 +136,11 @@ _testRepository.AddOne(myDoc);
 The above code will generate a collection named `myPartitionKey-myPartitionedDocuments`.
 
 ## CollectionName Attribute
+
 It is now possible to change the collection name by using the `CollectionName` attribute:
 
 ```csharp
+
     [CollectionName("MyCollectionName")]
     public class MyDocument : Document
     {
@@ -145,16 +150,20 @@ It is now possible to change the collection name by using the `CollectionName` a
         }
         public string SomeContent { get; set; }
     }
+
 ```
+
 Documents of this type will be inserted into a collection named "MyCollectionName".
 
-Please refer to the IntegrationTests (NET45) and CoreIntegrationTests (netstandard2.0) projects for more usage examples.
+Please refer to the  CoreIntegrationTests (netstandard2.0) project for more usage examples.
 
 ## Author
-**Alexandre Spieser**
+
+Alexandre Spieser
 
 ## License
-mongodb-generic-repository is under MIT license - http://www.opensource.org/licenses/mit-license.php
+
+mongodb-generic-repository is under MIT license - <http://www.opensource.org/licenses/mit-license.php>
 
 The MIT License (MIT)
 
@@ -180,17 +189,18 @@ THE SOFTWARE.
 
 ==============================================================================
 
-Inflector (https://github.com/srkirkland/Inflector)
+Inflector (<https://github.com/srkirkland/Inflector)>
 The MIT License (MIT)
 Copyright (c) 2013 Scott Kirkland
 
 ==============================================================================
 
-Humanizer (https://github.com/Humanizr/Humanizer)
+Humanizer (<https://github.com/Humanizr/Humanizer)>
 The MIT License (MIT)
-Copyright (c) 2012-2014 Mehdi Khalili (http://omar.io)
+Copyright (c) 2012-2014 Mehdi Khalili (<http://omar.io)>
 
 ==============================================================================
 
 ## Copyright
+
 Copyright © 2018

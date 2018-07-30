@@ -39,7 +39,7 @@ namespace MongoDbGenericRepository
         }
 
         /// <summary>
-        /// The contructor taking a <see cref="IMongoDbContext"/>.
+        /// The s taking a <see cref="IMongoDbContext"/>.
         /// </summary>
         /// <param name="mongoDbContext">A mongodb context implementing <see cref="IMongoDbContext"/></param>
         protected ReadOnlyMongoRepository(IMongoDbContext mongoDbContext)
@@ -48,7 +48,7 @@ namespace MongoDbGenericRepository
         }
 
         /// <summary>
-        /// The contructor taking a <see cref="IMongoDatabase"/>.
+        /// The constructor taking a <see cref="IMongoDatabase"/>.
         /// </summary>
         /// <param name="mongoDatabase">A mongodb context implementing <see cref="IMongoDatabase"/></param>
         protected ReadOnlyMongoRepository(IMongoDatabase mongoDatabase)
@@ -123,7 +123,7 @@ namespace MongoDbGenericRepository
         /// <param name="partitionKey">An optional partition key.</param>
         public async Task<bool> AnyAsync<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null) where TDocument : IDocument
         {
-            var count = await HandlePartitioned<TDocument>(partitionKey).CountAsync(filter);
+            var count = await HandlePartitioned<TDocument>(partitionKey).CountDocumentsAsync(filter);
             return (count > 0);
         }
 
@@ -135,7 +135,7 @@ namespace MongoDbGenericRepository
         /// <param name="partitionKey">An optional partition key.</param>
         public bool Any<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null) where TDocument : IDocument
         {
-            var count = HandlePartitioned<TDocument>(partitionKey).Count(filter);
+            var count = HandlePartitioned<TDocument>(partitionKey).CountDocuments(filter);
             return (count > 0);
         }
 
@@ -169,7 +169,7 @@ namespace MongoDbGenericRepository
         /// <param name="partitionKey">An optional partitionKey</param>
         public async Task<long> CountAsync<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null) where TDocument : IDocument
         {
-            return await HandlePartitioned<TDocument>(partitionKey).CountAsync(filter);
+            return await HandlePartitioned<TDocument>(partitionKey).CountDocumentsAsync(filter);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace MongoDbGenericRepository
         /// <param name="partitionKey">An optional partitionKey</param>
         public long Count<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null) where TDocument : IDocument
         {
-            return HandlePartitioned<TDocument>(partitionKey).Find(filter).Count();
+            return HandlePartitioned<TDocument>(partitionKey).CountDocuments(filter);
         }
 
         #endregion
@@ -270,7 +270,7 @@ namespace MongoDbGenericRepository
             where TDocument : IDocument<TKey>
             where TKey : IEquatable<TKey>
         {
-            var count = await HandlePartitioned<TDocument, TKey>(partitionKey).CountAsync(filter);
+            var count = await HandlePartitioned<TDocument, TKey>(partitionKey).CountDocumentsAsync(filter);
             return (count > 0);
         }
 
@@ -285,8 +285,7 @@ namespace MongoDbGenericRepository
             where TDocument : IDocument<TKey>
             where TKey : IEquatable<TKey>
         {
-            var count = HandlePartitioned<TDocument, TKey>(partitionKey).Count(filter);
-            return (count > 0);
+            return HandlePartitioned<TDocument, TKey>(partitionKey).CountDocuments(filter) > 0;
         }
 
         /// <summary>
@@ -328,7 +327,7 @@ namespace MongoDbGenericRepository
             where TDocument : IDocument<TKey>
             where TKey : IEquatable<TKey>
         {
-            return await HandlePartitioned<TDocument, TKey>(partitionKey).CountAsync(filter);
+            return await HandlePartitioned<TDocument, TKey>(partitionKey).CountDocumentsAsync(filter);
         }
 
         /// <summary>
@@ -342,7 +341,7 @@ namespace MongoDbGenericRepository
             where TDocument : IDocument<TKey>
             where TKey : IEquatable<TKey>
         {
-            return HandlePartitioned<TDocument, TKey>(partitionKey).Find(filter).Count();
+            return HandlePartitioned<TDocument, TKey>(partitionKey).CountDocuments(filter);
         }
 
         #endregion
