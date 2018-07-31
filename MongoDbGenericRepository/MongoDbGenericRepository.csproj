@@ -2,13 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>MongoDbGenericRepository</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Authors>Alexandre Spieser</Authors>
+    
     <Description>A generic repository implementation using the MongoDB C# Sharp driver.</Description>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>.NET Core supported.</PackageReleaseNotes>
-    <Copyright>Copyright 2017 (c) Alexandre Spieser. All rights reserved.</Copyright>
+   
+    
     <PackageTags>MongoDb Repository NoSql Generic</PackageTags>
   </PropertyGroup>
   
