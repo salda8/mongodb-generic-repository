@@ -1,4 +1,5 @@
 type project
+id MongoGenericRepository
 title MongoGenericRepository
 licenseUrl https://github.com/salda8/mongodb-generic-repository/blob/master/LICENSE
 projectUrl https://github.com/salda8/mongodb-generic-repository/
